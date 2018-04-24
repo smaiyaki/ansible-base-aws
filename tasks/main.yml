@@ -1,0 +1,8 @@
+---
+- include: deps.yml
+  tags: deps
+  when: base_deps is defined and base_deps == True
+
+- include: hosts.yml
+  tags: hosts
+  when: base_hosts is defined and base_hosts == True

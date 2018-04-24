@@ -1,0 +1,87 @@
+---
+- name: Debian | Install list of packages
+  apt: pkg={{item}} state=installed update_cache=yes
+  with_items:
+    - rsync
+    - tar
+    - git-core
+    - vim
+    - jq
+    - tmux
+    - htop
+    - unzip
+    - telnet
+    - ntp
+    - python-pip
+    - locales
+    - apt-transport-https
+    - lsof
+    - curl
+    - zip
+    - nfs-common
+    - acl
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Debian 8 | Install list of packages
+  apt: pkg={{item}} state=installed update_cache=yes
+  with_items:
+    - dbus
+  when: ansible_distribution == 'Debian' and ansible_distribution_release == 'jessie'
+
+- name: Centos | Install list of packages
+  yum: pkg={{item}} state=installed update_cache=yes
+  with_items:
+    - git
+    - vim
+    - tmux
+    - telnet
+    - ntp
+    - lsof
+    - xfsprogs
+    - lvm2
+    - unzip
+    - ed
+    - libselinux-python
+    - python-setuptools
+    - nfs-utils
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat'
+
+- name: Centos | Install pip via easy_install
+  easy_install:
+    name: pip
+    state: latest
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat'
+
+- locale_gen: name=fr_FR.UTF-8 state=present
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: "Vim config file"
+  copy: src=vimrc
+        dest=/etc/vim/vimrc
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: "Vim config file"
+  copy: src=vimrc
+        dest=/etc/vimrc
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat'
+
+- group: name=admin state=present
+- user: name=admin group=admin shell=/bin/bash state=present skeleton=/etc/skel
+
+- name: Debian | Install extra list of packages
+  apt: pkg={{item}} state=installed update_cache=yes
+  with_items:
+    - "{{ base_extra_packages }}"
+  when: extra_packages|length > 0 and (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+
+- name: Centos | Install extra list of packages
+  yum: pkg={{item}} state=installed update_cache=yes
+  with_items:
+    - "{{ base_extra_packages }}"
+  when: extra_packages|length > 0 and (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
+
+- name: Install extra list of pip packages
+  pip: name={{item}} state=present
+  with_items:
+    - "{{ base_extra_pip_packages }}"
+  when: extra_pip_packages|length > 0
