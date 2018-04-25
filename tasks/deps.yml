@@ -20,6 +20,8 @@
     - zip
     - nfs-common
     - acl
+    - python-boto3
+    - python-botocore
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Debian 8 | Install list of packages
@@ -44,6 +46,8 @@
     - libselinux-python
     - python-setuptools
     - nfs-utils
+    - python-boto3
+    - python-botocore
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat'
 
 - name: Centos | Install pip via easy_install
