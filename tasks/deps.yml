@@ -76,16 +76,16 @@
   apt: pkg={{item}} state=installed update_cache=yes
   with_items:
     - "{{ base_extra_packages }}"
-  when: extra_packages|length > 0 and (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  when: base_extra_packages|length > 0 and (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
 
 - name: Centos | Install extra list of packages
   yum: pkg={{item}} state=installed update_cache=yes
   with_items:
     - "{{ base_extra_packages }}"
-  when: extra_packages|length > 0 and (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
+  when: base_extra_packages|length > 0 and (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
 
 - name: Install extra list of pip packages
   pip: name={{item}} state=present
   with_items:
     - "{{ base_extra_pip_packages }}"
-  when: extra_pip_packages|length > 0
+  when: base_extra_pip_packages|length > 0
