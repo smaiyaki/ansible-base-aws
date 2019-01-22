@@ -9,6 +9,7 @@ base_hosts: false
 base_hosts_suffix: ""
 base_manage_host_file: true
 base_custom_hosts: {}
+base_ignore_hostname_setup_error: false
 
 base_manage_host_r53: false
 base_r53_internal_zone: ""
